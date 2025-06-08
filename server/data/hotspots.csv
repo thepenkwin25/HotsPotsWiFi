@@ -1,0 +1,21 @@
+name,address,category,latitude,longitude,isFree,wifiPassword,description
+Starbucks Coffee,123 Market St San Francisco CA,Coffee Shop,37.7749,-122.4194,true,,Free WiFi with purchase
+McDonald's Downtown,456 Mission St San Francisco CA,Fast Food,37.7849,-122.4094,true,,Complimentary WiFi for customers
+San Francisco Public Library,100 Larkin St San Francisco CA,Library,37.7793,-122.4161,true,,High-speed public internet access
+Blue Bottle Coffee,66 Mint St San Francisco CA,Coffee Shop,37.7849,-122.4094,true,,Premium WiFi for coffee lovers
+Whole Foods Market,1765 California St San Francisco CA,Grocery Store,37.7919,-122.4258,true,,Free WiFi while shopping
+Hotel Zephyr,250 Beach St San Francisco CA,Hotel,37.8097,-122.4161,false,guest2024,Complimentary WiFi for guests
+Coupa Cafe,538 Ramona St Palo Alto CA,Coffee Shop,37.4419,-122.1430,true,,Popular tech startup hangout
+Stanford University Library,450 Serra Mall Stanford CA,Library,37.4275,-122.1697,true,,Academic network access
+Apple Park Visitor Center,10600 N Tantau Ave Cupertino CA,Technology,37.3348,-122.0090,true,,Free WiFi at visitor center
+Google Campus,1600 Amphitheatre Pkwy Mountain View CA,Technology,37.4220,-122.0841,true,,Public WiFi in common areas
+Facebook HQ,1 Hacker Way Menlo Park CA,Technology,37.4843,-122.1477,true,,Visitor WiFi available
+UC Berkeley Library,101 Doe Memorial Library Berkeley CA,Library,37.8719,-122.2585,true,,University WiFi network
+Berkeley Bowl,2020 Oregon St Berkeley CA,Grocery Store,37.8575,-122.2711,true,,Free WiFi for shoppers
+Philz Coffee,3101 24th St San Francisco CA,Coffee Shop,37.7529,-122.4140,true,,Artisanal coffee with WiFi
+The Castro Theatre,429 Castro St San Francisco CA,Entertainment,37.7609,-122.4350,false,theater123,WiFi in lobby area
+Fisherman's Wharf,Pier 39 San Francisco CA,Tourist Area,37.8087,-122.4098,true,,Public WiFi hotspot
+Golden Gate Park,501 Stanyan St San Francisco CA,Park,37.7694,-122.4862,true,,City-provided outdoor WiFi
+Salesforce Tower,415 Mission St San Francisco CA,Business,37.7898,-122.3972,false,tower2024,Business center WiFi
+Union Square,333 Post St San Francisco CA,Shopping,37.7880,-122.4074,true,,Free public WiFi zone
+Oakland International Airport,1 Airport Dr Oakland CA,Airport,37.7214,-122.2208,true,,Complimentary airport WiFi

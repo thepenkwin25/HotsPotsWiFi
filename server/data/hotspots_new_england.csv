@@ -1,0 +1,71 @@
+name,address,category,latitude,longitude,isFree,wifiPassword,description,isVerified,moderationStatus,submittedBy
+Starbucks,755 Boylston St Boston MA,Cafe,42.349816,-71.082682,true,,Popular coffee chain with reliable free WiFi,true,approved,system
+Starbucks,665 Beacon St Boston MA,Cafe,42.349731,-71.104474,true,,Beacon Street location with comfortable seating,true,approved,system
+Starbucks,27 School St Boston MA,Cafe,42.357443,-71.058468,true,,Downtown Boston location near historic sites,true,approved,system
+Starbucks,222 Main St Worcester MA,Cafe,42.263278,-71.799659,true,,Central Worcester coffee shop with WiFi,true,approved,system
+Starbucks,1 Faneuil Hall Marketplace Boston MA,Cafe,42.360244,-71.055898,true,,Historic Faneuil Hall location with tourist amenities,true,approved,system
+Starbucks,100 Hanover St Portland ME,Cafe,43.658434,-70.254553,true,,Portland Hanover Street location with WiFi,true,approved,system
+Starbucks,1000 Elm St Manchester NH,Cafe,42.989943,-71.464008,true,,Downtown Manchester with free internet access,true,approved,system
+Starbucks,10 Memorial Blvd Providence RI,Cafe,41.826381,-71.410096,true,,Providence downtown with reliable WiFi service,true,approved,system
+Starbucks,1050 Kennedy Rd Manchester NH,Cafe,42.990634,-71.454435,true,,Manchester location with drive-through service,true,approved,system
+Starbucks,100 Church St Burlington VT,Cafe,44.479681,-73.211594,true,,Burlington Church Street marketplace location,true,approved,system
+Starbucks,580 Main St Hartford CT,Cafe,41.765804,-72.682936,true,,Hartford downtown location with WiFi,true,approved,system
+Starbucks,29 Middle St Portland ME,Cafe,43.659063,-70.255194,true,,Portland Old Port district location,true,approved,system
+Starbucks,160 Federal St Boston MA,Cafe,42.354241,-71.056114,true,,Financial District location with business amenities,true,approved,system
+Starbucks,799 Boylston St Boston MA,Cafe,42.347553,-71.083684,true,,Back Bay location near Prudential Center,true,approved,system
+Starbucks,1280 Massachusetts Ave Cambridge MA,Cafe,42.373378,-71.118176,true,,Harvard Square area with student-friendly WiFi,true,approved,system
+Starbucks,212 College St Burlington VT,Cafe,44.476467,-73.210954,true,,College Street location near University of Vermont,true,approved,system
+Starbucks,84 Washington St West Hartford CT,Cafe,41.763808,-72.743239,true,,West Hartford Center with free WiFi access,true,approved,system
+Dunkin',100 Cambridge St Boston MA,Cafe,42.363482,-71.059470,true,,Classic New England coffee chain with free WiFi,true,approved,system
+Dunkin',45 Hanover St Manchester NH,Cafe,42.989731,-71.461869,true,,Manchester Hanover Street location,true,approved,system
+Dunkin',530 Congress St Portland ME,Cafe,43.654382,-70.262784,true,,Portland Congress Street with free internet,true,approved,system
+Dunkin',1111 S Willow St Manchester NH,Cafe,42.964713,-71.443527,true,,South Willow Street with drive-through,true,approved,system
+Dunkin',1160 Silas Deane Hwy Wethersfield CT,Cafe,41.698808,-72.655697,true,,Wethersfield highway location with WiFi,true,approved,system
+Dunkin',1 Kennedy Plaza Providence RI,Cafe,41.827893,-71.414601,true,,Central Providence transportation hub location,true,approved,system
+Dunkin',1 Burlington Mall Road Burlington MA,Cafe,42.483905,-71.195031,true,,Burlington Mall location with shopping amenities,true,approved,system
+Dunkin',280 S Main St Burlington VT,Cafe,44.468783,-73.210371,true,,Burlington South Main Street location,true,approved,system
+Dunkin',127 Main St Brattleboro VT,Cafe,42.850917,-72.557801,true,,Brattleboro Main Street with free WiFi,true,approved,system
+Dunkin',1285 Congress St Portland ME,Cafe,43.658187,-70.302924,true,,Portland Congress Street extended location,true,approved,system
+Dunkin',550 Broadway South Portland ME,Cafe,43.627591,-70.304653,true,,South Portland Broadway with internet access,true,approved,system
+Dunkin',10 East Main St Meriden CT,Cafe,41.538153,-72.801636,true,,Meriden East Main Street location,true,approved,system
+Dunkin',23 Elm St Westfield MA,Cafe,42.123923,-72.749074,true,,Westfield Elm Street with complimentary WiFi,true,approved,system
+Dunkin',670 Main St Worcester MA,Cafe,42.257105,-71.795262,true,,Worcester Main Street downtown location,true,approved,system
+Dunkin',192 Main St Nashua NH,Cafe,42.759926,-71.467095,true,,Nashua Main Street with free internet,true,approved,system
+Dunkin',282 Main St Biddeford ME,Cafe,43.493884,-70.453341,true,,Biddeford Main Street location,true,approved,system
+Dunkin',51 Main St Brunswick ME,Cafe,43.914664,-69.965684,true,,Brunswick Main Street with WiFi access,true,approved,system
+Dunkin',150 Main St Concord NH,Cafe,43.203142,-71.537572,true,,Concord Main Street downtown location,true,approved,system
+McDonald's,540 Commonwealth Ave Boston MA,Fast Food,42.350298,-71.103683,true,,Commonwealth Avenue location with free WiFi,true,approved,system
+McDonald's,14 Bridge St Nashua NH,Fast Food,42.763741,-71.465953,true,,Nashua Bridge Street with complimentary internet,true,approved,system
+McDonald's,187 S Main St West Hartford CT,Fast Food,41.756499,-72.747655,true,,West Hartford location with family dining area,true,approved,system
+McDonald's,1465 Main St Springfield MA,Fast Food,42.098833,-72.589506,true,,Springfield Main Street with free WiFi access,true,approved,system
+McDonald's,250 Kennedy Memorial Dr Waterville ME,Fast Food,44.538239,-69.657722,true,,Waterville location with 24-hour WiFi service,true,approved,system
+McDonald's,409 Putnam Pike Smithfield RI,Fast Food,41.872638,-71.540993,true,,Smithfield Pike location with drive-through,true,approved,system
+McDonald's,221 Main St Burlington VT,Fast Food,44.476981,-73.214546,true,,Burlington downtown with reliable internet,true,approved,system
+McDonald's,285 Maple St Manchester NH,Fast Food,42.989184,-71.466568,true,,Manchester Maple Street with free WiFi,true,approved,system
+McDonald's,203 S Main St Concord NH,Fast Food,43.197212,-71.537097,true,,Concord South Main Street location,true,approved,system
+McDonald's,2320 Berlin Tpke Newington CT,Fast Food,41.681802,-72.727971,true,,Newington Berlin Turnpike with WiFi access,true,approved,system
+McDonald's,61 Main St Bangor ME,Fast Food,44.800884,-68.773039,true,,Bangor Main Street downtown location,true,approved,system
+McDonald's,633 Broadway South Portland ME,Fast Food,43.636736,-70.264040,true,,South Portland Broadway with internet service,true,approved,system
+McDonald's,95 Talcott Rd Williston VT,Fast Food,44.437814,-73.094424,true,,Williston Talcott Road with complimentary WiFi,true,approved,system
+McDonald's,175 N Main St Barre VT,Fast Food,44.201445,-72.502028,true,,Barre North Main Street location,true,approved,system
+Panera Bread,1154 Beacon St Brookline MA,Bakery Cafe,42.343054,-71.123324,true,,Bakery cafe with unlimited free WiFi and study areas,true,approved,system
+Panera Bread,343 S Broadway Salem NH,Bakery Cafe,42.765932,-71.227082,true,,Salem location with comfortable work environment,true,approved,system
+Panera Bread,253 Hartford Ave Bellingham MA,Bakery Cafe,42.082893,-71.474271,true,,Bellingham location with free WiFi for customers,true,approved,system
+Panera Bread,267 Hartford Turnpike Vernon CT,Bakery Cafe,41.825097,-72.507856,true,,Vernon location with study-friendly atmosphere,true,approved,system
+Panera Bread,1200 Post Rd E Westport CT,Bakery Cafe,41.132144,-73.338742,true,,Westport location with premium WiFi service,true,approved,system
+Panera Bread,201 Needham St Newton MA,Bakery Cafe,42.313792,-71.206854,true,,Newton location popular with students and professionals,true,approved,system
+Panera Bread,343 Main St Watertown MA,Bakery Cafe,42.370510,-71.182053,true,,Watertown Main Street with reliable internet access,true,approved,system
+Panera Bread,89 Marginal Way Portland ME,Bakery Cafe,43.662103,-70.259684,true,,Portland Marginal Way with study-friendly WiFi,true,approved,system
+Panera Bread,1235 Dixwell Ave Hamden CT,Bakery Cafe,41.370934,-72.924054,true,,Hamden location with comfortable seating and WiFi,true,approved,system
+Panera Bread,1200 Shelburne Rd South Burlington VT,Bakery Cafe,44.437370,-73.206908,true,,South Burlington location with reliable internet,true,approved,system
+Panera Bread,933 North Main St West Hartford CT,Bakery Cafe,41.778785,-72.740168,true,,West Hartford North Main Street location,true,approved,system
+Boston Public Library,700 Boylston St Boston MA,Library,42.3493,-71.0780,true,,Central library with free WiFi throughout all floors,true,approved,system
+Providence Public Library,150 Empire St Providence RI,Library,41.8237,-71.4158,true,,Main library branch with comprehensive WiFi coverage,true,approved,system
+Hartford Public Library,500 Main St Hartford CT,Library,41.765724,-72.675155,true,,Hartford main library with high-speed internet access,true,approved,system
+Manchester City Library,405 Pine St Manchester NH,Library,42.9907,-71.4637,true,,Main branch of Manchester library system with WiFi,true,approved,system
+Portland Public Library,5 Monument Sq Portland ME,Library,43.6561,-70.2606,true,,Historic library in downtown Portland with free WiFi,true,approved,system
+Nashua Public Library,2 Court St Nashua NH,Library,42.7617,-71.4676,true,,Modern library facility with high-speed WiFi,true,approved,system
+Bangor Public Library,145 Harlow St Bangor ME,Library,44.8035,-68.7717,true,,Community library with free internet access,true,approved,system
+Burlington Town Center,49 Church St Burlington VT,Shopping,44.4784,-73.2121,true,,Downtown shopping area with public WiFi access,true,approved,system
+Springfield City Library,220 State St Springfield MA,Library,42.1049,-72.5887,true,,Springfield main library with study areas and WiFi,true,approved,system
+New Haven Free Public Library,133 Elm St New Haven CT,Library,41.3081,-72.9301,true,,New Haven central library with free internet access,true,approved,system

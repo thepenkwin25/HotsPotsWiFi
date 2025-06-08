@@ -1,0 +1,39 @@
+name,address,city,state,category,verified,latitude,longitude
+Starbucks,755 Boylston St,Boston,MA,Cafe,true,42.349816,-71.082682
+Starbucks,665 Beacon St,Boston,MA,Cafe,true,42.349731,-71.104474
+Starbucks,27 School St,Boston,MA,Cafe,true,42.357443,-71.058468
+Starbucks,222 Main St,Worcester,MA,Cafe,true,42.263278,-71.799659
+Starbucks,1050 Kennedy Rd,Manchester,NH,Cafe,true,42.990634,-71.454435
+Starbucks,1000 Elm St,Manchester,NH,Cafe,true,42.989943,-71.464008
+Starbucks,580 Main St,Hartford,CT,Cafe,true,41.765804,-72.682936
+Starbucks,100 Church St,Burlington,VT,Cafe,true,44.479681,-73.211594
+Starbucks,1 Faneuil Hall Marketplace,Boston,MA,Cafe,true,42.360244,-71.055898
+Starbucks,10 Memorial Blvd,Providence,RI,Cafe,true,41.826381,-71.410096
+Starbucks,29 Middle St,Portland,ME,Cafe,true,43.659063,-70.255194
+Dunkin',100 Cambridge St,Boston,MA,Cafe,true,42.363482,-71.059470
+Dunkin',45 Hanover St,Manchester,NH,Cafe,true,42.989731,-71.461869
+Dunkin',1111 S Willow St,Manchester,NH,Cafe,true,42.964713,-71.443527
+Dunkin',1160 Silas Deane Hwy,Wethersfield,CT,Cafe,true,41.698808,-72.655697
+Dunkin',1 Kennedy Plaza,Providence,RI,Cafe,true,41.827893,-71.414601
+Dunkin',530 Congress St,Portland,ME,Cafe,true,43.654382,-70.262784
+Dunkin',1 Burlington Mall Road,Burlington,MA,Cafe,true,42.483905,-71.195031
+McDonald's,540 Commonwealth Ave,Boston,MA,Fast Food,true,42.350298,-71.103683
+McDonald's,14 Bridge St,Nashua,NH,Fast Food,true,42.763741,-71.465953
+McDonald's,187 S Main St,West Hartford,CT,Fast Food,true,41.756499,-72.747655
+McDonald's,1465 Main St,Springfield,MA,Fast Food,true,42.098833,-72.589506
+McDonald's,250 Kennedy Memorial Dr,Waterville,ME,Fast Food,true,44.538239,-69.657722
+McDonald's,409 Putnam Pike,Smithfield,RI,Fast Food,true,41.872638,-71.540993
+McDonald's,221 Main St,Burlington,VT,Fast Food,true,44.476981,-73.214546
+Panera Bread,1154 Beacon St,Brookline,MA,Bakery Cafe,true,42.343054,-71.123324
+Panera Bread,343 S Broadway,Salem,NH,Bakery Cafe,true,42.765932,-71.227082
+Panera Bread,253 Hartford Ave,Bellingham,MA,Bakery Cafe,true,42.082893,-71.474271
+Panera Bread,267 Hartford Turnpike,Vernon,CT,Bakery Cafe,true,41.825097,-72.507856
+Panera Bread,1200 Post Rd E,Westport,CT,Bakery Cafe,true,41.132144,-73.338742
+Panera Bread,201 Needham St,Newton,MA,Bakery Cafe,true,42.313792,-71.206854
+Panera Bread,343 Main St,Watertown,MA,Bakery Cafe,true,42.370510,-71.182053
+Boston Public Library,700 Boylston St,Boston,MA,Library,true,42.3493,-71.0780
+Providence Public Library,150 Empire St,Providence,RI,Library,true,41.8237,-71.4158
+Hartford Public Library,500 Main St,Hartford,CT,Library,true,41.765724,-72.675155
+Manchester City Library,405 Pine St,Manchester,NH,Library,true,42.9907,-71.4637
+Portland Public Library,5 Monument Sq,Portland,ME,Library,true,43.6561,-70.2606
+Burlington Town Center,49 Church St,Burlington,VT,Shopping,true,44.4784,-73.2121

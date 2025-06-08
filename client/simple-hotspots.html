@@ -1,0 +1,217 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>HotsPots WiFi Finder</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background: #f5f7fa;
+      margin: 0;
+      padding: 20px;
+    }
+    .container {
+      max-width: 800px;
+      margin: 0 auto;
+      background: white;
+      border-radius: 16px;
+      padding: 24px;
+      box-shadow: 0 4px 20px rgba(0,0,0,0.1);
+    }
+    h1 {
+      color: #2d4ca3;
+      text-align: center;
+      margin-bottom: 30px;
+    }
+    .hotspot-card {
+      background: white;
+      border: 1px solid #e5e7eb;
+      border-radius: 12px;
+      padding: 20px;
+      margin-bottom: 16px;
+      cursor: pointer;
+      transition: all 0.2s;
+      position: relative;
+    }
+    .hotspot-card:hover {
+      box-shadow: 0 8px 25px rgba(0,0,0,0.15);
+      transform: translateY(-2px);
+    }
+    .hotspot-name {
+      font-size: 1.2rem;
+      font-weight: bold;
+      color: #1f2937;
+      margin-bottom: 8px;
+    }
+    .rating-section {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      margin-bottom: 8px;
+    }
+    .stars {
+      color: #fbbf24;
+      font-size: 1rem;
+    }
+    .rating-text {
+      color: #6b7280;
+      font-size: 0.9rem;
+    }
+    .address {
+      color: #6b7280;
+      margin-bottom: 8px;
+    }
+    .category {
+      background: #e6f1fe;
+      color: #3572d6;
+      padding: 4px 12px;
+      border-radius: 16px;
+      font-size: 0.85rem;
+      display: inline-block;
+    }
+    .wifi-badge {
+      background: #10b981;
+      color: white;
+      padding: 4px 12px;
+      border-radius: 16px;
+      font-size: 0.85rem;
+      position: absolute;
+      top: 16px;
+      right: 16px;
+    }
+    .sponsored-badge {
+      background: #fbbf24;
+      color: #92400e;
+      padding: 2px 8px;
+      border-radius: 12px;
+      font-size: 0.75rem;
+      font-weight: bold;
+      position: absolute;
+      top: 8px;
+      right: 8px;
+    }
+    .search-box {
+      width: 100%;
+      padding: 12px;
+      border: 1px solid #d1d5db;
+      border-radius: 8px;
+      margin-bottom: 20px;
+      font-size: 1rem;
+    }
+    .ad-banner {
+      width: 100%;
+      height: 90px;
+      background: #f8fafc;
+      border: 2px dashed #e2e8f0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin-bottom: 20px;
+      color: #64748b;
+      font-size: 0.9rem;
+    }
+    .loading {
+      text-align: center;
+      padding: 40px;
+      color: #6b7280;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <div class="ad-banner">
+      📢 Advertisement Space - 728x90 Banner
+    </div>
+    
+    <h1>HotsPots WiFi Finder</h1>
+    
+    <input type="text" class="search-box" id="searchInput" placeholder="Search by name, category, or address...">
+    
+    <div id="hotspotsList" class="loading">
+      Loading WiFi hotspots...
+    </div>
+  </div>
+
+  <script>
+    let allHotspots = [];
+    
+    // Load hotspots from API
+    async function loadHotspots() {
+      try {
+        const response = await fetch('/api/hotspots');
+        allHotspots = await response.json();
+        displayHotspots(allHotspots);
+      } catch (error) {
+        document.getElementById('hotspotsList').innerHTML = '<div style="text-align: center; color: #ef4444;">Failed to load hotspots. Please refresh the page.</div>';
+      }
+    }
+    
+    function displayHotspots(hotspots) {
+      const container = document.getElementById('hotspotsList');
+      
+      if (hotspots.length === 0) {
+        container.innerHTML = '<div style="text-align: center; color: #6b7280;">No hotspots found.</div>';
+        return;
+      }
+      
+      container.innerHTML = '';
+      hotspots.forEach(hotspot => {
+        const card = document.createElement('div');
+        card.className = 'hotspot-card';
+        card.onclick = () => window.location.href = `/hotspot/${hotspot.id}`;
+        
+        // Generate star rating
+        let stars = '';
+        if (hotspot.averageRating > 0) {
+          for (let i = 1; i <= 5; i++) {
+            stars += i <= hotspot.averageRating ? '★' : '☆';
+          }
+        }
+        
+        card.innerHTML = `
+          ${hotspot.isSponsored ? '<div class="sponsored-badge">FEATURED</div>' : ''}
+          ${hotspot.isFree ? '<div class="wifi-badge">Free WiFi</div>' : ''}
+          
+          <div class="hotspot-name">
+            ${hotspot.name}
+            ${hotspot.isVerified ? ' ✓' : ''}
+          </div>
+          
+          ${hotspot.averageRating > 0 ? `
+            <div class="rating-section">
+              <span class="stars">${stars}</span>
+              <span class="rating-text">${hotspot.averageRating.toFixed(1)} (${hotspot.reviewCount} reviews)</span>
+            </div>
+          ` : ''}
+          
+          <div class="address">${hotspot.address}</div>
+          <div class="category">${hotspot.category}</div>
+        `;
+        
+        container.appendChild(card);
+      });
+    }
+    
+    // Search functionality
+    document.getElementById('searchInput').addEventListener('input', function(e) {
+      const query = e.target.value.toLowerCase();
+      if (!query) {
+        displayHotspots(allHotspots);
+        return;
+      }
+      
+      const filtered = allHotspots.filter(hotspot =>
+        hotspot.name.toLowerCase().includes(query) ||
+        hotspot.address.toLowerCase().includes(query) ||
+        hotspot.category.toLowerCase().includes(query)
+      );
+      
+      displayHotspots(filtered);
+    });
+    
+    // Initialize
+    document.addEventListener('DOMContentLoaded', loadHotspots);
+  </script>
+</body>
+</html>

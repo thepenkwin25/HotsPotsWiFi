@@ -1,0 +1,785 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>HotsPots WiFi Finder</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link href="https://fonts.googleapis.com/css?family=Inter:400,700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"/>
+  <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" onerror="console.log('Leaflet failed to load, map disabled')"></script>
+  <script src="https://unpkg.com/@supabase/supabase-js@2" onerror="console.log('Supabase client failed to load, auth disabled')"></script>
+  <style>
+    body {
+      font-family: 'Inter', Arial, sans-serif;
+      background: #f5f7fa;
+      margin: 0;
+      padding: 0;
+    }
+    .container {
+      max-width: 600px;
+      margin: 40px auto;
+      background: #fff;
+      border-radius: 20px;
+      box-shadow: 0 6px 24px rgba(10, 60, 130, 0.07);
+      padding: 2.5rem 2rem 2rem 2rem;
+    }
+    h1 {
+      text-align: center;
+      color: #2d4ca3;
+      margin-bottom: 10px;
+      font-size: 2.3rem;
+      font-weight: 800;
+      letter-spacing: -1px;
+    }
+    .subtitle {
+      text-align: center;
+      color: #5e6c82;
+      margin-bottom: 25px;
+      font-size: 1.13rem;
+      font-weight: 400;
+    }
+    .search-bar {
+      width: 100%;
+      margin-bottom: 24px;
+      padding: 12px;
+      border: 1.5px solid #d8e2ec;
+      border-radius: 10px;
+      font-size: 1rem;
+      outline: none;
+      transition: border-color 0.2s;
+      box-sizing: border-box;
+    }
+    .search-bar:focus {
+      border-color: #23c6dd;
+    }
+    .hotspot-card {
+      background: #fff;
+      border-radius: 13px;
+      box-shadow: 0 2px 8px rgba(10, 60, 130, 0.08);
+      padding: 1.1rem 1.4rem 1.1rem 1.4rem;
+      margin-bottom: 1.3rem;
+      display: flex;
+      flex-direction: column;
+      gap: 0.7rem;
+      position: relative;
+      border: 1px solid #ebeff5;
+    }
+    .hotspot-header {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      font-size: 1.13rem;
+      font-weight: 700;
+      color: #1e2c47;
+    }
+    .badge {
+      font-size: 0.93rem;
+      background: #23c67a;
+      color: #fff;
+      padding: 2.5px 10px 2.5px 10px;
+      border-radius: 12px;
+      margin-left: 6px;
+      font-weight: 600;
+      display: flex;
+      align-items: center;
+      gap: 4px;
+    }
+    .category {
+      font-size: 0.93rem;
+      background: #e6f1fe;
+      color: #3572d6;
+      padding: 2px 11px;
+      border-radius: 9px;
+      font-weight: 600;
+      display: inline-block;
+      margin-right: 9px;
+      margin-top: 2px;
+      margin-bottom: 0;
+    }
+    .address {
+      font-size: 0.98rem;
+      color: #5e6c82;
+      font-weight: 500;
+    }
+    .wifi-label {
+      position: absolute;
+      right: 18px;
+      bottom: 18px;
+      background: #fff;
+      color: #23c67a;
+      font-weight: 800;
+      font-size: 1.01rem;
+      border: 1.5px solid #23c67a;
+      border-radius: 7px;
+      padding: 2px 13px;
+      transition: background 0.12s, color 0.12s;
+      cursor: pointer;
+      user-select: none;
+    }
+    .wifi-label:hover {
+      background: #23c67a;
+      color: #fff;
+    }
+    .loading {
+      text-align: center;
+      padding: 40px;
+      font-size: 1.2rem;
+      color: #6b7280;
+    }
+    .error {
+      background-color: #fef2f2;
+      border: 1px solid #fecaca;
+      color: #dc2626;
+      padding: 20px;
+      border-radius: 8px;
+      margin: 20px 0;
+    }
+    .about-section {
+      text-align: center;
+      margin-top: 38px;
+      margin-bottom: 18px;
+      color: #6b7b90;
+      font-size: 0.97rem;
+    }
+    .admin-link {
+      text-align: center;
+      margin-top: 20px;
+      padding: 15px;
+      background-color: #f8fafc;
+      border: 1px solid #cbd5e1;
+      border-radius: 8px;
+    }
+    .admin-link a {
+      color: #2563eb;
+      text-decoration: none;
+      font-weight: 600;
+    }
+    .admin-link a:hover {
+      text-decoration: underline;
+    }
+    .map-container {
+      height: 340px;
+      width: 100%;
+      border-radius: 15px;
+      margin-bottom: 28px;
+      box-shadow: 0 3px 12px rgba(44,74,122,.07);
+      border: 1px solid #e0e7ef;
+    }
+    .locate-btn {
+      margin: 10px 0 22px 0;
+      display: block;
+      width: 100%;
+      background: #23c6dd;
+      color: #fff;
+      font-weight: 700;
+      font-size: 1rem;
+      padding: 10px 0;
+      border: none;
+      border-radius: 9px;
+      cursor: pointer;
+      transition: background 0.2s;
+    }
+    .locate-btn:hover {
+      background: #1fb5cc;
+    }
+    .map-toggle {
+      display: flex;
+      gap: 10px;
+      margin-bottom: 20px;
+      justify-content: center;
+    }
+    .toggle-btn {
+      padding: 8px 16px;
+      border: 1px solid #d8e2ec;
+      background: #fff;
+      color: #5e6c82;
+      border-radius: 8px;
+      cursor: pointer;
+      font-weight: 600;
+      transition: all 0.2s;
+    }
+    .toggle-btn.active {
+      background: #2d4ca3;
+      color: #fff;
+      border-color: #2d4ca3;
+    }
+    .header-section {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 10px;
+    }
+    .auth-container {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+    .auth-btn {
+      padding: 8px 16px;
+      background: #2d4ca3;
+      color: white;
+      border: none;
+      border-radius: 8px;
+      cursor: pointer;
+      font-weight: 600;
+      font-size: 0.9rem;
+      transition: background 0.2s;
+      display: block;
+    }
+    .auth-btn:hover {
+      background: #1e3a8a;
+    }
+    .user-profile {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      padding: 6px 12px;
+      background: #f8fafc;
+      border: 1px solid #e2e8f0;
+      border-radius: 8px;
+    }
+    .user-avatar {
+      width: 24px;
+      height: 24px;
+      border-radius: 50%;
+      object-fit: cover;
+    }
+    .user-name {
+      font-size: 0.9rem;
+      font-weight: 600;
+      color: #374151;
+    }
+    .logout-btn {
+      padding: 4px 8px;
+      background: #dc2626;
+      color: white;
+      border: none;
+      border-radius: 6px;
+      cursor: pointer;
+      font-size: 0.8rem;
+      font-weight: 500;
+    }
+    .logout-btn:hover {
+      background: #b91c1c;
+    }
+    .rating-section {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      margin-top: 8px;
+      margin-bottom: 4px;
+    }
+    .star-rating {
+      display: flex;
+      gap: 1px;
+    }
+    .star {
+      color: #fbbf24;
+      font-size: 0.9rem;
+    }
+    .rating-text {
+      font-size: 0.85rem;
+      color: #6b7280;
+      font-weight: 500;
+    }
+    .sponsored-badge {
+      position: absolute;
+      top: 10px;
+      right: 10px;
+      background: #fbbf24;
+      color: #92400e;
+      padding: 2px 8px;
+      border-radius: 12px;
+      font-size: 0.7rem;
+      font-weight: 700;
+    }
+    @media (max-width: 650px) {
+      .container {
+        max-width: 100%;
+        margin: 0;
+        border-radius: 0;
+        box-shadow: none;
+        padding: 1.3rem 0.7rem 2rem 0.7rem;
+      }
+      .wifi-label { right: 13px; bottom: 13px; }
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <div class="header-section">
+      <h1>HotsPots WiFi Finder</h1>
+      <div class="auth-container" id="authContainer">
+        <button class="auth-btn" id="loginBtn">👤 Sign In</button>
+        <div class="user-profile" id="userProfile" style="display: none;">
+          <img class="user-avatar" id="userAvatar" />
+          <span class="user-name" id="userName"></span>
+          <button class="logout-btn" id="logoutBtn">Sign Out</button>
+        </div>
+      </div>
+    </div>
+    <div class="subtitle" id="subtitle">
+      Loading WiFi hotspots...
+    </div>
+    
+    <div class="map-toggle" id="viewToggle" style="display: none;">
+      <button class="toggle-btn active" data-view="list">List View</button>
+      <button class="toggle-btn" data-view="map">Map View</button>
+    </div>
+    
+    <input class="search-bar" id="searchInput" placeholder="Search by name, category, or address…" style="display: none;" />
+    
+    <div id="mapContainer" style="display: none;">
+      <button class="locate-btn" id="locateBtn">📍 Show My Location</button>
+      <div id="map" class="map-container"></div>
+    </div>
+    
+    <div id="hotspotList">
+      <div class="loading">Loading hotspots...</div>
+    </div>
+    
+    <div class="admin-link">
+      <strong>Admin Panel:</strong> <a href="/admin">Manage hotspot submissions and moderation</a>
+    </div>
+    
+    <div class="about-section">
+      <strong>What is HotsPots?</strong><br>
+      The easiest way to find verified, free WiFi around you. Built for speed, privacy, and reliability.<br>
+      <br>
+      <span style="font-size:0.91em; color:#adc;">Made with ❤️ by the HotsPots Team</span>
+    </div>
+  </div>
+
+  <script>
+    // Supabase authentication setup
+    const { createClient } = supabase;
+    
+    // Initialize Supabase client using environment variables from server
+    let supabaseUrl = '';
+    let supabaseKey = '';
+    
+    // Fetch Supabase configuration from server
+    fetch('/api/config')
+      .then(response => response.json())
+      .then(config => {
+        supabaseUrl = config.supabaseUrl;
+        supabaseKey = config.supabaseAnonKey;
+        
+        if (supabaseUrl && supabaseKey) {
+          supabaseClient = createClient(supabaseUrl, supabaseKey);
+          initAuth();
+        } else {
+          // Show login button even without Supabase config
+          updateAuthUI(null);
+        }
+      })
+      .catch(() => {
+        console.log('Supabase configuration not available');
+        // Show login button even if config fails
+        updateAuthUI(null);
+      });
+    
+    let supabaseClient;
+    let currentUser = null;
+    
+    try {
+      supabaseClient = createClient(supabaseUrl, supabaseKey);
+    } catch (error) {
+      console.log('Supabase client initialization pending configuration');
+    }
+    
+    // Authentication UI elements
+    const $loginBtn = document.getElementById('loginBtn');
+    const $userProfile = document.getElementById('userProfile');
+    const $userAvatar = document.getElementById('userAvatar');
+    const $userName = document.getElementById('userName');
+    const $logoutBtn = document.getElementById('logoutBtn');
+    
+    // Authentication functions
+    async function initAuth() {
+      if (!supabaseClient) return;
+      
+      try {
+        const { data: { session } } = await supabaseClient.auth.getSession();
+        updateAuthUI(session?.user || null);
+        
+        // Listen for auth changes
+        supabaseClient.auth.onAuthStateChange((event, session) => {
+          updateAuthUI(session?.user || null);
+        });
+      } catch (error) {
+        console.log('Authentication initialization pending');
+      }
+    }
+    
+    function updateAuthUI(user) {
+      currentUser = user;
+      
+      if (user) {
+        $loginBtn.style.display = 'none';
+        $userProfile.style.display = 'flex';
+        
+        $userName.textContent = user.user_metadata?.full_name || user.email?.split('@')[0] || 'User';
+        
+        if (user.user_metadata?.avatar_url) {
+          $userAvatar.src = user.user_metadata.avatar_url;
+          $userAvatar.style.display = 'block';
+        } else {
+          $userAvatar.style.display = 'none';
+        }
+      } else {
+        $loginBtn.style.display = 'block';
+        $userProfile.style.display = 'none';
+      }
+    }
+    
+    async function signInWithGoogle() {
+      if (!supabaseClient) {
+        alert('Authentication is being configured. Please try again in a moment.');
+        return;
+      }
+      
+      try {
+        const { error } = await supabaseClient.auth.signInWithOAuth({
+          provider: 'google',
+          options: {
+            redirectTo: window.location.origin + window.location.pathname,
+            queryParams: {
+              access_type: 'offline',
+              prompt: 'consent'
+            }
+          }
+        });
+        
+        if (error) throw error;
+      } catch (error) {
+        console.error('Login error:', error);
+        alert('Login failed. Please try again.');
+      }
+    }
+    
+    async function signOut() {
+      if (!supabaseClient) return;
+      
+      try {
+        const { error } = await supabaseClient.auth.signOut();
+        if (error) throw error;
+      } catch (error) {
+        console.error('Logout error:', error);
+      }
+    }
+    
+    // Initialize DOM elements and event listeners when page loads
+    document.addEventListener('DOMContentLoaded', function() {
+      // Event listeners for authentication
+      if ($loginBtn) $loginBtn.addEventListener('click', signInWithGoogle);
+      if ($logoutBtn) $logoutBtn.addEventListener('click', signOut);
+      
+      // Show login button initially
+      updateAuthUI(null);
+    });
+    
+    // Main app variables
+    let allHotspots = [];
+    let map = null;
+    let markers = [];
+    let currentView = 'list';
+    
+    const $hotspotList = document.getElementById('hotspotList');
+    const $subtitle = document.getElementById('subtitle');
+    const $search = document.getElementById('searchInput');
+    const $viewToggle = document.getElementById('viewToggle');
+    const $mapContainer = document.getElementById('mapContainer');
+
+    async function loadHotspots() {
+      try {
+        const response = await fetch('/api/hotspots');
+        
+        if (!response.ok) {
+          throw new Error(`HTTP ${response.status}: ${response.statusText}`);
+        }
+        
+        allHotspots = await response.json();
+        
+        if (!Array.isArray(allHotspots)) {
+          throw new Error('Invalid data format received');
+        }
+        
+        $subtitle.textContent = `Discover free WiFi hotspots near you.`;
+        $search.style.display = 'block';
+        $viewToggle.style.display = 'flex';
+        
+        renderList(allHotspots);
+        updateCount(allHotspots.length);
+        initializeMap();
+        
+      } catch (error) {
+        console.error('Error loading hotspots:', error);
+        $subtitle.textContent = 'Error loading hotspots';
+        $hotspotList.innerHTML = `
+          <div class="error">
+            <strong>Error loading hotspots:</strong> ${escapeHtml(error.message)}<br>
+            Backend server is running on port 5000 with 20 hotspots loaded.
+          </div>
+        `;
+      }
+    }
+
+    function initializeMap() {
+      if (!map && allHotspots.length > 0) {
+        // Center on first hotspot or San Francisco default
+        const centerLat = allHotspots[0]?.latitude || 37.7749;
+        const centerLng = allHotspots[0]?.longitude || -122.4194;
+        
+        map = L.map('map').setView([centerLat, centerLng], 12);
+        L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+          attribution: '&copy; OpenStreetMap contributors'
+        }).addTo(map);
+        
+        addMarkersToMap(allHotspots);
+      }
+    }
+
+    function addMarkersToMap(hotspots) {
+      // Clear existing markers
+      markers.forEach(marker => map.removeLayer(marker));
+      markers = [];
+      
+      hotspots.forEach(hs => {
+        if (hs.latitude && hs.longitude) {
+          const icon = L.divIcon({
+            className: 'custom-marker',
+            html: `<div style="background: ${hs.isFree ? '#23c67a' : '#ff6b6b'}; width: 20px; height: 20px; border-radius: 50%; border: 2px solid white; box-shadow: 0 2px 4px rgba(0,0,0,0.3);"></div>`,
+            iconSize: [20, 20],
+            iconAnchor: [10, 10]
+          });
+          
+          const marker = L.marker([hs.latitude, hs.longitude], { icon })
+            .addTo(map)
+            .bindPopup(`
+              <div style="font-family: Inter, sans-serif;">
+                <strong style="color: #1e2c47;">${escapeHtml(hs.name)}</strong>
+                ${hs.isVerified ? '<span style="background: #23c67a; color: white; padding: 2px 6px; border-radius: 8px; font-size: 0.8rem; margin-left: 8px;">✓ Verified</span>' : ''}
+                <br><span style="color: #5e6c82; font-size: 0.9rem;">${escapeHtml(hs.address)}</span>
+                <br><span style="background: #e6f1fe; color: #3572d6; padding: 2px 8px; border-radius: 6px; font-size: 0.8rem; display: inline-block; margin-top: 4px;">${escapeHtml(hs.category)}</span>
+                <br><strong style="color: ${hs.isFree ? '#23c67a' : '#ff6b6b'}; margin-top: 4px; display: block;">${hs.isFree ? 'Free WiFi' : 'Paid Access'}</strong>
+              </div>
+            `);
+          
+          markers.push(marker);
+        }
+      });
+      
+      // Fit map to show all markers if multiple hotspots
+      if (markers.length > 1) {
+        const group = new L.featureGroup(markers);
+        map.fitBounds(group.getBounds().pad(0.1));
+      }
+    }
+
+    function renderList(hotspots) {
+      if (hotspots.length === 0) {
+        $hotspotList.innerHTML = '<div class="error">No hotspots found matching your search.</div>';
+        return;
+      }
+
+      $hotspotList.innerHTML = '';
+      hotspots.forEach(hs => {
+        const card = document.createElement('div');
+        card.className = 'hotspot-card';
+        card.style.cursor = 'pointer';
+        
+        // Click handler to navigate to detail page
+        card.onclick = () => {
+          window.location.href = `/hotspot/${hs.id}`;
+        };
+
+        // Sponsored badge
+        if (hs.isSponsored) {
+          const sponsoredBadge = document.createElement('div');
+          sponsoredBadge.className = 'sponsored-badge';
+          sponsoredBadge.textContent = 'FEATURED';
+          card.appendChild(sponsoredBadge);
+        }
+
+        // Header + badge
+        const header = document.createElement('div');
+        header.className = 'hotspot-header';
+        header.innerHTML = `${escapeHtml(hs.name)} ${hs.isVerified ? `<span class="badge">✔ Verified</span>` : ''}`;
+        card.appendChild(header);
+
+        // Rating section
+        if (hs.averageRating > 0) {
+          const ratingSection = document.createElement('div');
+          ratingSection.className = 'rating-section';
+          
+          const stars = document.createElement('div');
+          stars.className = 'star-rating';
+          
+          for (let i = 1; i <= 5; i++) {
+            const star = document.createElement('span');
+            star.className = 'star';
+            star.textContent = i <= hs.averageRating ? '★' : '☆';
+            stars.appendChild(star);
+          }
+          
+          const ratingText = document.createElement('span');
+          ratingText.className = 'rating-text';
+          ratingText.textContent = `${hs.averageRating.toFixed(1)} (${hs.reviewCount} review${hs.reviewCount !== 1 ? 's' : ''})`;
+          
+          ratingSection.appendChild(stars);
+          ratingSection.appendChild(ratingText);
+          card.appendChild(ratingSection);
+        }
+
+        // Address
+        const addr = document.createElement('div');
+        addr.className = 'address';
+        addr.textContent = hs.address;
+        card.appendChild(addr);
+
+        // Category
+        const cat = document.createElement('div');
+        cat.className = 'category';
+        cat.textContent = hs.category;
+        card.appendChild(cat);
+
+        // Free WiFi label (only if actually free)
+        if (hs.isFree) {
+          const wifi = document.createElement('div');
+          wifi.className = 'wifi-label';
+          wifi.textContent = 'Free WiFi';
+          wifi.title = 'Click to copy location info';
+          wifi.onclick = (e) => {
+            e.stopPropagation(); // Prevent card click
+            navigator.clipboard.writeText(hs.name + " - " + hs.address)
+              .then(() => {
+                wifi.textContent = 'Copied!';
+                setTimeout(() => (wifi.textContent = 'Free WiFi'), 1200);
+              })
+              .catch(() => {
+                wifi.textContent = 'Copy failed';
+                setTimeout(() => (wifi.textContent = 'Free WiFi'), 1200);
+              });
+          };
+          card.appendChild(wifi);
+        }
+
+        $hotspotList.appendChild(card);
+      });
+    }
+
+    function updateCount(n) {
+      $subtitle.innerHTML = `Discover free WiFi hotspots near you.<br><span style="font-weight: 600;">${n} verified locations available.</span>`;
+    }
+
+    function escapeHtml(text) {
+      const div = document.createElement('div');
+      div.textContent = text;
+      return div.innerHTML;
+    }
+
+    // View toggle functionality
+    document.querySelectorAll('.toggle-btn').forEach(btn => {
+      btn.addEventListener('click', () => {
+        const view = btn.dataset.view;
+        if (view !== currentView) {
+          currentView = view;
+          
+          // Update button states
+          document.querySelectorAll('.toggle-btn').forEach(b => b.classList.remove('active'));
+          btn.classList.add('active');
+          
+          // Show/hide views
+          if (view === 'map') {
+            $hotspotList.style.display = 'none';
+            $mapContainer.style.display = 'block';
+            // Resize map after showing
+            setTimeout(() => {
+              if (map) {
+                map.invalidateSize();
+                // Update map with current search results
+                const q = $search.value.trim().toLowerCase();
+                const filtered = q ? allHotspots.filter(hs =>
+                  hs.name.toLowerCase().includes(q) ||
+                  hs.category.toLowerCase().includes(q) ||
+                  hs.address.toLowerCase().includes(q)
+                ) : allHotspots;
+                addMarkersToMap(filtered);
+              }
+            }, 100);
+          } else {
+            $hotspotList.style.display = 'block';
+            $mapContainer.style.display = 'none';
+          }
+        }
+      });
+    });
+
+    // Geolocation functionality
+    document.getElementById('locateBtn').addEventListener('click', () => {
+      if (navigator.geolocation) {
+        const btn = document.getElementById('locateBtn');
+        btn.textContent = '📍 Locating...';
+        btn.disabled = true;
+        
+        navigator.geolocation.getCurrentPosition(
+          (position) => {
+            const { latitude, longitude } = position.coords;
+            map.setView([latitude, longitude], 15);
+            
+            // Add user location marker
+            const userIcon = L.divIcon({
+              className: 'user-marker',
+              html: `<div style="background: #2d4ca3; width: 15px; height: 15px; border-radius: 50%; border: 3px solid white; box-shadow: 0 2px 6px rgba(0,0,0,0.4);"></div>`,
+              iconSize: [15, 15],
+              iconAnchor: [7.5, 7.5]
+            });
+            
+            L.marker([latitude, longitude], { icon: userIcon })
+              .addTo(map)
+              .bindPopup('📍 You are here!')
+              .openPopup();
+            
+            btn.textContent = '📍 Location Found';
+            setTimeout(() => {
+              btn.textContent = '📍 Show My Location';
+              btn.disabled = false;
+            }, 2000);
+          },
+          (error) => {
+            console.error('Geolocation error:', error);
+            btn.textContent = '📍 Location Unavailable';
+            setTimeout(() => {
+              btn.textContent = '📍 Show My Location';
+              btn.disabled = false;
+            }, 2000);
+          }
+        );
+      } else {
+        alert('Geolocation is not supported by this browser.');
+      }
+    });
+
+    // Filter/search handler
+    $search.addEventListener('input', () => {
+      const q = $search.value.trim().toLowerCase();
+      const filtered = allHotspots.filter(hs =>
+        hs.name.toLowerCase().includes(q) ||
+        hs.category.toLowerCase().includes(q) ||
+        hs.address.toLowerCase().includes(q)
+      );
+      
+      if (currentView === 'list') {
+        renderList(filtered);
+      } else {
+        addMarkersToMap(filtered);
+      }
+      updateCount(filtered.length);
+    });
+
+    // Load hotspots when page loads
+    document.addEventListener('DOMContentLoaded', loadHotspots);
+  </script>
+</body>
+</html>

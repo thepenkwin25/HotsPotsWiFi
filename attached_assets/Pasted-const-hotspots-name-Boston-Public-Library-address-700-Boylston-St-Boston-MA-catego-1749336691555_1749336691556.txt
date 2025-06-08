@@ -1,0 +1,22 @@
+const hotspots = [
+  { name: "Boston Public Library", address: "700 Boylston St, Boston, MA", category: "Library", verified: true, latitude: 42.3493, longitude: -71.0780 },
+  { name: "South Station", address: "700 Atlantic Ave, Boston, MA", category: "Transit", verified: true, latitude: 42.3522, longitude: -71.0552 },
+  { name: "Dunkin' (Harvard Square)", address: "1230 Massachusetts Ave, Cambridge, MA", category: "Coffee Shop", verified: true, latitude: 42.3736, longitude: -71.1189 },
+  { name: "MIT Student Center", address: "84 Massachusetts Ave, Cambridge, MA", category: "Campus", verified: true, latitude: 42.3592, longitude: -71.0935 },
+  { name: "Providence Place Mall", address: "1 Providence Pl, Providence, RI", category: "Shopping Mall", verified: true, latitude: 41.8252, longitude: -71.4150 },
+  { name: "RISD Library", address: "15 Westminster St, Providence, RI", category: "Library", verified: true, latitude: 41.8236, longitude: -71.4081 },
+  { name: "Portland Public Library", address: "5 Monument Sq, Portland, ME", category: "Library", verified: true, latitude: 43.6561, longitude: -70.2606 },
+  { name: "Bangor Public Library", address: "145 Harlow St, Bangor, ME", category: "Library", verified: true, latitude: 44.8035, longitude: -68.7717 },
+  { name: "Manchester City Library", address: "405 Pine St, Manchester, NH", category: "Library", verified: true, latitude: 42.9907, longitude: -71.4637 },
+  { name: "Nashua Public Library", address: "2 Court St, Nashua, NH", category: "Library", verified: true, latitude: 42.7617, longitude: -71.4676 },
+  { name: "Burlington Town Center", address: "49 Church St, Burlington, VT", category: "Shopping", verified: true, latitude: 44.4784, longitude: -73.2121 },
+  { name: "University of Vermont Davis Center", address: "590 Main St, Burlington, VT", category: "Campus", verified: true, latitude: 44.4767, longitude: -73.1966 },
+  { name: "Stamford Train Station", address: "30 S State St, Stamford, CT", category: "Transit", verified: true, latitude: 41.0462, longitude: -73.5426 },
+  { name: "Yale University Library", address: "120 High St, New Haven, CT", category: "Campus", verified: true, latitude: 41.3112, longitude: -72.9296 },
+  { name: "Connecticut Science Center", address: "250 Columbus Blvd, Hartford, CT", category: "Museum", verified: true, latitude: 41.7675, longitude: -72.6661 },
+  { name: "Hartford Union Station", address: "1 Union Pl, Hartford, CT", category: "Transit", verified: true, latitude: 41.7684, longitude: -72.6842 },
+  { name: "Worcester Public Library", address: "3 Salem Sq, Worcester, MA", category: "Library", verified: true, latitude: 42.2627, longitude: -71.8023 },
+  { name: "Springfield Union Station", address: "55 Frank B Murray St, Springfield, MA", category: "Transit", verified: true, latitude: 42.1046, longitude: -72.5937 },
+  { name: "Mystic Seaport Museum", address: "75 Greenmanville Ave, Mystic, CT", category: "Museum", verified: true, latitude: 41.3625, longitude: -71.9636 },
+  { name: "Providence Public Library", address: "150 Empire St, Providence, RI", category: "Library", verified: true, latitude: 41.8237, longitude: -71.4158 }
+];

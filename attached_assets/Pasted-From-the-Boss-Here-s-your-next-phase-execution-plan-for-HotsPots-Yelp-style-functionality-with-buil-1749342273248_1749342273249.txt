@@ -1,0 +1,84 @@
+From the Boss: Here’s your next-phase execution plan for HotsPots—Yelp-style functionality with built-in revenue streams, ready for Replit dev handoff.
+
+⸻
+
+🚦 HotsPots Next Steps: Yelp-Style Features & Monetization
+
+Phase 1: Yelp-Style User Features
+
+1. Reviews & Ratings
+	•	Allow users to rate hotspots (1–5 stars) and leave reviews.
+	•	Show average star rating, review count, and latest reviews on each hotspot’s detail page/card.
+	•	Moderation flow for flagging/removing inappropriate content (admin panel update).
+
+2. Photos
+	•	Allow users to upload photos of WiFi locations.
+	•	Photo gallery on each hotspot detail card.
+	•	Moderation queue for admin approval.
+
+3. Detailed Hotspot Pages
+	•	Each location clickable—shows full details, reviews, photos, map, “favorite” button, and “submit edit/report problem” link.
+
+4. Search & Filters
+	•	Add filter by rating, brand, category, or open now.
+	•	Smart search that shows hotspots by relevance and rating.
+
+⸻
+
+Phase 2: Revenue Streams
+
+1. Google AdSense Integration
+	•	Reserve ad space:
+	•	Banner at top/bottom of main page
+	•	Sidebar or in-feed native ads between hotspot cards
+	•	Square banner on detail page
+	•	Add Google AdSense code to these spots, ready for activation once traffic builds.
+
+2. Featured Locations / Sponsored Listings
+	•	Allow coffee shops, restaurants, etc., to pay for “Featured” status (showing at the top or highlighted).
+	•	Add backend/admin toggles for “sponsored” tag.
+
+3. Affiliate/Partner Offers
+	•	Space for affiliate banners (e.g., WiFi extenders, VPNs, tech gadgets).
+	•	Automated or admin-managed offers displayed to users.
+
+⸻
+
+Phase 3: Data Products
+
+1. API Subscription
+	•	Businesses or developers can subscribe for hotspot data feeds.
+	•	Free tier for basic queries; paid API access for analytics or marketing.
+
+2. Premium User Features
+	•	Ad-free experience for paid subscribers
+	•	Early access to new features (map clusters, neighborhood heatmaps, etc.)
+
+⸻
+
+🛠️ Actionable Replit Implementation Plan (Copy-Paste for Devs)
+
+⸻
+
+1. Backend/Database
+	•	Add new tables:
+	•	reviews (id, user_id, hotspot_id, rating, comment, photo_url, created_at, status)
+	•	photos (id, user_id, hotspot_id, photo_url, approved, created_at)
+	•	sponsored_hotspots (hotspot_id, start_date, end_date, payment_id)
+	•	Extend existing hotspots table: Add average_rating, review_count, is_sponsored
+
+⸻
+
+2. Frontend
+	•	Detail Page:
+	•	New route/view: /hotspot/:id
+	•	Display details, reviews (with star ratings), review form, photo gallery, favorite button, ad spots
+	•	Review Submission:
+	•	Users logged in can rate and write reviews
+	•	Optional photo upload
+	•	Photos:
+	•	Users can add photos (show pending until admin approves)
+	•	Gallery on hotspot page
+	•	Ads:
+	•	Reserve space in:
+	•	Top banner:

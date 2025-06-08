@@ -1,0 +1,691 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>HotsPots WiFi Finder - Hotspot Details</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link href="https://fonts.googleapis.com/css?family=Inter:400,500,600,700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"/>
+  <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+  <script src="https://unpkg.com/@supabase/supabase-js@2"></script>
+  <style>
+    body {
+      font-family: 'Inter', Arial, sans-serif;
+      background: #f5f7fa;
+      margin: 0;
+      padding: 0;
+    }
+    .container {
+      max-width: 800px;
+      margin: 20px auto;
+      background: #fff;
+      border-radius: 16px;
+      box-shadow: 0 4px 20px rgba(10, 60, 130, 0.08);
+      overflow: hidden;
+    }
+    .hero-section {
+      position: relative;
+      background: linear-gradient(135deg, #2d4ca3 0%, #1e3a8a 100%);
+      color: white;
+      padding: 2rem;
+    }
+    .back-btn {
+      position: absolute;
+      top: 1rem;
+      left: 1rem;
+      background: rgba(255,255,255,0.2);
+      border: none;
+      color: white;
+      padding: 8px 12px;
+      border-radius: 8px;
+      cursor: pointer;
+      font-weight: 600;
+      backdrop-filter: blur(10px);
+    }
+    .back-btn:hover {
+      background: rgba(255,255,255,0.3);
+    }
+    .hotspot-title {
+      font-size: 2rem;
+      font-weight: 700;
+      margin: 0 0 0.5rem 0;
+    }
+    .hotspot-category {
+      background: rgba(255,255,255,0.2);
+      padding: 4px 12px;
+      border-radius: 20px;
+      display: inline-block;
+      font-size: 0.9rem;
+      margin-bottom: 1rem;
+    }
+    .rating-section {
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+      margin-bottom: 1rem;
+    }
+    .star-rating {
+      display: flex;
+      gap: 2px;
+    }
+    .star {
+      font-size: 1.2rem;
+      color: #fbbf24;
+    }
+    .rating-text {
+      font-size: 1rem;
+      font-weight: 600;
+    }
+    .review-count {
+      font-size: 0.9rem;
+      opacity: 0.9;
+    }
+    
+    /* Ad Banner at Top */
+    .ad-banner-top {
+      width: 100%;
+      height: 90px;
+      background: #f8fafc;
+      border: 2px dashed #e2e8f0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin-bottom: 1rem;
+      color: #64748b;
+      font-size: 0.9rem;
+    }
+    
+    .content-section {
+      padding: 2rem;
+    }
+    .info-grid {
+      display: grid;
+      grid-template-columns: 2fr 1fr;
+      gap: 2rem;
+      margin-bottom: 2rem;
+    }
+    .main-info {
+      display: flex;
+      flex-direction: column;
+      gap: 1.5rem;
+    }
+    .sidebar {
+      display: flex;
+      flex-direction: column;
+      gap: 1rem;
+    }
+    
+    /* Ad Sidebar */
+    .ad-sidebar {
+      width: 100%;
+      height: 250px;
+      background: #f8fafc;
+      border: 2px dashed #e2e8f0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: #64748b;
+      font-size: 0.9rem;
+      border-radius: 8px;
+    }
+    
+    .address-section {
+      background: #f8fafc;
+      padding: 1rem;
+      border-radius: 8px;
+      border-left: 4px solid #2d4ca3;
+    }
+    .address-text {
+      font-size: 1.1rem;
+      font-weight: 600;
+      color: #374151;
+    }
+    .wifi-info {
+      background: #ecfdf5;
+      padding: 1rem;
+      border-radius: 8px;
+      border: 1px solid #10b981;
+    }
+    .wifi-status {
+      color: #059669;
+      font-weight: 600;
+      font-size: 1.1rem;
+    }
+    
+    .photos-section {
+      margin-bottom: 2rem;
+    }
+    .photos-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+      gap: 1rem;
+      margin-top: 1rem;
+    }
+    .photo-item {
+      aspect-ratio: 1;
+      background: #f3f4f6;
+      border-radius: 8px;
+      overflow: hidden;
+      cursor: pointer;
+    }
+    .photo-item img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+    
+    .reviews-section {
+      margin-bottom: 2rem;
+    }
+    .section-title {
+      font-size: 1.5rem;
+      font-weight: 700;
+      color: #1f2937;
+      margin-bottom: 1rem;
+    }
+    
+    .write-review-btn {
+      background: #2d4ca3;
+      color: white;
+      border: none;
+      padding: 12px 24px;
+      border-radius: 8px;
+      font-weight: 600;
+      cursor: pointer;
+      margin-bottom: 1.5rem;
+    }
+    .write-review-btn:hover {
+      background: #1e3a8a;
+    }
+    
+    .review-item {
+      border-bottom: 1px solid #e5e7eb;
+      padding: 1.5rem 0;
+    }
+    .review-item:last-child {
+      border-bottom: none;
+    }
+    .review-header {
+      display: flex;
+      justify-content: between;
+      align-items: center;
+      margin-bottom: 0.5rem;
+    }
+    .reviewer-name {
+      font-weight: 600;
+      color: #374151;
+    }
+    .review-date {
+      color: #6b7280;
+      font-size: 0.9rem;
+    }
+    .review-rating {
+      display: flex;
+      gap: 2px;
+      margin-bottom: 0.5rem;
+    }
+    .review-text {
+      color: #4b5563;
+      line-height: 1.6;
+    }
+    
+    /* Inline Ad between reviews */
+    .ad-inline {
+      width: 100%;
+      height: 120px;
+      background: #f8fafc;
+      border: 2px dashed #e2e8f0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin: 2rem 0;
+      color: #64748b;
+      font-size: 0.9rem;
+      border-radius: 8px;
+    }
+    
+    .map-section {
+      height: 300px;
+      background: #f3f4f6;
+      border-radius: 8px;
+      margin-bottom: 2rem;
+    }
+    
+    .action-buttons {
+      display: flex;
+      gap: 1rem;
+      margin-bottom: 2rem;
+    }
+    .btn {
+      padding: 12px 24px;
+      border-radius: 8px;
+      font-weight: 600;
+      cursor: pointer;
+      border: none;
+      transition: all 0.2s;
+    }
+    .btn-primary {
+      background: #2d4ca3;
+      color: white;
+    }
+    .btn-primary:hover {
+      background: #1e3a8a;
+    }
+    .btn-secondary {
+      background: #f3f4f6;
+      color: #374151;
+      border: 1px solid #d1d5db;
+    }
+    .btn-secondary:hover {
+      background: #e5e7eb;
+    }
+    .btn-favorite {
+      background: #fef3c7;
+      color: #d97706;
+      border: 1px solid #fbbf24;
+    }
+    .btn-favorite:hover {
+      background: #fde68a;
+    }
+    .btn-favorite.active {
+      background: #f59e0b;
+      color: white;
+    }
+    
+    .sponsored-badge {
+      position: absolute;
+      top: 1rem;
+      right: 1rem;
+      background: #fbbf24;
+      color: #92400e;
+      padding: 4px 12px;
+      border-radius: 20px;
+      font-size: 0.8rem;
+      font-weight: 700;
+    }
+    
+    @media (max-width: 768px) {
+      .container {
+        margin: 0;
+        border-radius: 0;
+      }
+      .info-grid {
+        grid-template-columns: 1fr;
+      }
+      .action-buttons {
+        flex-direction: column;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <!-- Top Ad Banner -->
+    <div class="ad-banner-top">
+      📢 Advertisement Space - 728x90 Banner
+    </div>
+    
+    <div class="hero-section">
+      <button class="back-btn" onclick="history.back()">← Back</button>
+      <div class="sponsored-badge" id="sponsoredBadge" style="display: none;">FEATURED</div>
+      
+      <h1 class="hotspot-title" id="hotspotName">Loading...</h1>
+      <div class="hotspot-category" id="hotspotCategory">Loading...</div>
+      
+      <div class="rating-section">
+        <div class="star-rating" id="starRating">
+          <span class="star">★</span>
+          <span class="star">★</span>
+          <span class="star">★</span>
+          <span class="star">★</span>
+          <span class="star">☆</span>
+        </div>
+        <span class="rating-text" id="ratingText">4.0</span>
+        <span class="review-count" id="reviewCount">(12 reviews)</span>
+      </div>
+    </div>
+    
+    <div class="content-section">
+      <div class="info-grid">
+        <div class="main-info">
+          <div class="address-section">
+            <div class="address-text" id="hotspotAddress">Loading address...</div>
+          </div>
+          
+          <div class="wifi-info">
+            <div class="wifi-status" id="wifiStatus">✓ Free WiFi Available</div>
+            <div id="wifiPassword" style="margin-top: 0.5rem; display: none;">
+              <strong>Password:</strong> <span id="passwordText"></span>
+            </div>
+          </div>
+          
+          <div id="hotspotDescription">
+            Loading description...
+          </div>
+        </div>
+        
+        <div class="sidebar">
+          <!-- Sidebar Ad -->
+          <div class="ad-sidebar">
+            📢 Advertisement<br/>300x250 Square
+          </div>
+          
+          <div class="action-buttons">
+            <button class="btn btn-favorite" id="favoriteBtn">
+              ⭐ Add to Favorites
+            </button>
+          </div>
+        </div>
+      </div>
+      
+      <div class="map-section" id="hotspotMap"></div>
+      
+      <div class="photos-section">
+        <h2 class="section-title">Photos</h2>
+        <div class="photos-grid" id="photosGrid">
+          <div class="photo-item" style="background: #f3f4f6; display: flex; align-items: center; justify-content: center; color: #6b7280;">
+            📷 No photos yet
+          </div>
+        </div>
+      </div>
+      
+      <div class="reviews-section">
+        <h2 class="section-title">Reviews & Ratings</h2>
+        
+        <button class="write-review-btn" id="writeReviewBtn">
+          ✍️ Write a Review
+        </button>
+        
+        <div id="reviewsList">
+          <div class="review-item">
+            <div class="review-header">
+              <span class="reviewer-name">Sarah M.</span>
+              <span class="review-date">2 days ago</span>
+            </div>
+            <div class="review-rating">
+              <span class="star">★</span>
+              <span class="star">★</span>
+              <span class="star">★</span>
+              <span class="star">★</span>
+              <span class="star">★</span>
+            </div>
+            <div class="review-text">
+              Great WiFi speed and comfortable seating. Perfect for remote work!
+            </div>
+          </div>
+          
+          <!-- Inline Ad after 5th review -->
+          <div class="ad-inline">
+            📢 Sponsored Content - 728x120 Native Ad
+          </div>
+          
+          <div class="review-item">
+            <div class="review-header">
+              <span class="reviewer-name">Mike R.</span>
+              <span class="review-date">1 week ago</span>
+            </div>
+            <div class="review-rating">
+              <span class="star">★</span>
+              <span class="star">★</span>
+              <span class="star">★</span>
+              <span class="star">★</span>
+              <span class="star">☆</span>
+            </div>
+            <div class="review-text">
+              Good coffee and reliable internet. Can get crowded during lunch hours.
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    // Initialize page
+    let currentHotspot = null;
+    let supabaseClient = null;
+    let currentUser = null;
+    
+    // Get hotspot ID from URL
+    const urlParams = new URLSearchParams(window.location.search);
+    const hotspotId = urlParams.get('id');
+    
+    // Initialize Supabase
+    async function initSupabase() {
+      try {
+        const response = await fetch('/api/config');
+        const config = await response.json();
+        
+        if (config.supabaseUrl && config.supabaseAnonKey) {
+          const { createClient } = supabase;
+          supabaseClient = createClient(config.supabaseUrl, config.supabaseAnonKey);
+          
+          // Check auth state
+          const { data: { session } } = await supabaseClient.auth.getSession();
+          currentUser = session?.user || null;
+        }
+      } catch (error) {
+        console.log('Supabase configuration not available');
+      }
+    }
+    
+    // Load hotspot details
+    async function loadHotspotDetails() {
+      if (!hotspotId) {
+        document.getElementById('hotspotName').textContent = 'Hotspot not found';
+        return;
+      }
+      
+      try {
+        const response = await fetch(`/api/hotspots/${hotspotId}`);
+        if (!response.ok) throw new Error('Hotspot not found');
+        
+        currentHotspot = await response.json();
+        displayHotspotDetails(currentHotspot);
+        initializeMap(currentHotspot);
+        
+        // Load reviews
+        loadReviews();
+        
+        // Check if favorite
+        if (currentUser) {
+          checkFavoriteStatus();
+        }
+        
+      } catch (error) {
+        console.error('Error loading hotspot:', error);
+        document.getElementById('hotspotName').textContent = 'Error loading hotspot';
+      }
+    }
+    
+    function displayHotspotDetails(hotspot) {
+      document.getElementById('hotspotName').textContent = hotspot.name;
+      document.getElementById('hotspotCategory').textContent = hotspot.category;
+      document.getElementById('hotspotAddress').textContent = hotspot.address;
+      document.getElementById('hotspotDescription').textContent = hotspot.description || 'No description available.';
+      
+      // WiFi info
+      const wifiStatus = document.getElementById('wifiStatus');
+      const wifiPassword = document.getElementById('wifiPassword');
+      
+      if (hotspot.isFree) {
+        wifiStatus.textContent = '✓ Free WiFi Available';
+        wifiStatus.style.color = '#059669';
+      } else {
+        wifiStatus.textContent = '💳 Paid WiFi';
+        wifiStatus.style.color = '#d97706';
+      }
+      
+      if (hotspot.wifiPassword) {
+        wifiPassword.style.display = 'block';
+        document.getElementById('passwordText').textContent = hotspot.wifiPassword;
+      }
+      
+      // Rating display
+      displayRating(hotspot.averageRating || 0, hotspot.reviewCount || 0);
+      
+      // Sponsored badge
+      if (hotspot.isSponsored) {
+        document.getElementById('sponsoredBadge').style.display = 'block';
+      }
+    }
+    
+    function displayRating(rating, count) {
+      const starRating = document.getElementById('starRating');
+      const ratingText = document.getElementById('ratingText');
+      const reviewCount = document.getElementById('reviewCount');
+      
+      // Create star display
+      let starsHtml = '';
+      for (let i = 1; i <= 5; i++) {
+        if (i <= rating) {
+          starsHtml += '<span class="star">★</span>';
+        } else {
+          starsHtml += '<span class="star">☆</span>';
+        }
+      }
+      starRating.innerHTML = starsHtml;
+      
+      ratingText.textContent = rating.toFixed(1);
+      reviewCount.textContent = `(${count} review${count !== 1 ? 's' : ''})`;
+    }
+    
+    function initializeMap(hotspot) {
+      const mapContainer = document.getElementById('hotspotMap');
+      const map = L.map(mapContainer).setView([hotspot.latitude, hotspot.longitude], 16);
+      
+      L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+        attribution: '© OpenStreetMap contributors'
+      }).addTo(map);
+      
+      L.marker([hotspot.latitude, hotspot.longitude])
+        .addTo(map)
+        .bindPopup(`<strong>${hotspot.name}</strong><br/>${hotspot.address}`)
+        .openPopup();
+    }
+    
+    async function loadReviews() {
+      try {
+        const response = await fetch(`/api/hotspots/${hotspotId}/reviews`);
+        const reviews = await response.json();
+        displayReviews(reviews);
+      } catch (error) {
+        console.error('Error loading reviews:', error);
+      }
+    }
+    
+    function displayReviews(reviews) {
+      const reviewsList = document.getElementById('reviewsList');
+      
+      if (reviews.length === 0) {
+        reviewsList.innerHTML = '<p style="color: #6b7280; text-align: center; padding: 2rem;">No reviews yet. Be the first to review!</p>';
+        return;
+      }
+      
+      let reviewsHtml = '';
+      reviews.forEach((review, index) => {
+        // Add inline ad after every 5 reviews
+        if (index > 0 && index % 5 === 0) {
+          reviewsHtml += `
+            <div class="ad-inline">
+              📢 Sponsored Content - 728x120 Native Ad
+            </div>
+          `;
+        }
+        
+        reviewsHtml += `
+          <div class="review-item">
+            <div class="review-header">
+              <span class="reviewer-name">${review.username || 'Anonymous'}</span>
+              <span class="review-date">${formatDate(review.createdAt)}</span>
+            </div>
+            <div class="review-rating">
+              ${generateStars(review.rating)}
+            </div>
+            <div class="review-text">
+              ${review.comment || 'No comment provided.'}
+            </div>
+          </div>
+        `;
+      });
+      
+      reviewsList.innerHTML = reviewsHtml;
+    }
+    
+    function generateStars(rating) {
+      let stars = '';
+      for (let i = 1; i <= 5; i++) {
+        stars += i <= rating ? '<span class="star">★</span>' : '<span class="star">☆</span>';
+      }
+      return stars;
+    }
+    
+    function formatDate(dateString) {
+      const date = new Date(dateString);
+      const now = new Date();
+      const diffTime = Math.abs(now - date);
+      const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
+      
+      if (diffDays === 1) return 'Yesterday';
+      if (diffDays < 7) return `${diffDays} days ago`;
+      if (diffDays < 30) return `${Math.ceil(diffDays / 7)} weeks ago`;
+      return date.toLocaleDateString();
+    }
+    
+    async function checkFavoriteStatus() {
+      try {
+        const response = await fetch(`/api/favorites/check?userId=${currentUser.id}&hotspotId=${hotspotId}`);
+        const isFavorite = await response.json();
+        
+        const favoriteBtn = document.getElementById('favoriteBtn');
+        if (isFavorite) {
+          favoriteBtn.textContent = '⭐ Favorited';
+          favoriteBtn.classList.add('active');
+        }
+      } catch (error) {
+        console.error('Error checking favorite status:', error);
+      }
+    }
+    
+    // Event listeners
+    document.getElementById('favoriteBtn').addEventListener('click', async function() {
+      if (!currentUser) {
+        alert('Please sign in to add favorites');
+        return;
+      }
+      
+      try {
+        const method = this.classList.contains('active') ? 'DELETE' : 'POST';
+        const response = await fetch('/api/favorites', {
+          method,
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ userId: currentUser.id, hotspotId: parseInt(hotspotId) })
+        });
+        
+        if (response.ok) {
+          this.classList.toggle('active');
+          this.textContent = this.classList.contains('active') ? '⭐ Favorited' : '⭐ Add to Favorites';
+        }
+      } catch (error) {
+        console.error('Error toggling favorite:', error);
+      }
+    });
+    
+    document.getElementById('writeReviewBtn').addEventListener('click', function() {
+      if (!currentUser) {
+        alert('Please sign in to write a review');
+        return;
+      }
+      
+      // Open review modal (to be implemented)
+      alert('Review form coming soon!');
+    });
+    
+    // Initialize page
+    document.addEventListener('DOMContentLoaded', async function() {
+      await initSupabase();
+      await loadHotspotDetails();
+    });
+  </script>
+</body>
+</html>
