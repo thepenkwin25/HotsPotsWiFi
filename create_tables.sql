@@ -5,21 +5,44 @@ CREATE TABLE IF NOT EXISTS users (
   password TEXT NOT NULL
 );
 
+-- Create profiles table
+CREATE TABLE IF NOT EXISTS profiles (
+  id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
+  username TEXT NOT NULL,
+  avatar_url TEXT,
+  created_at TIMESTAMP DEFAULT NOW()
+);
+
 -- Create hotspots table
 CREATE TABLE IF NOT EXISTS hotspots (
-  id SERIAL PRIMARY KEY,
+  id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
   name TEXT NOT NULL,
   address TEXT NOT NULL,
   category TEXT NOT NULL,
-  latitude REAL NOT NULL,
-  longitude REAL NOT NULL,
-  is_free BOOLEAN NOT NULL DEFAULT true,
-  wifi_password TEXT,
-  description TEXT,
-  is_verified BOOLEAN NOT NULL DEFAULT false,
-  moderation_status TEXT NOT NULL DEFAULT 'approved' CHECK (moderation_status IN ('pending', 'approved', 'rejected')),
-  submitted_by TEXT,
-  created_at TIMESTAMP WITH TIME ZONE DEFAULT NOW() NOT NULL
+  latitude FLOAT NOT NULL,
+  longitude FLOAT NOT NULL,
+  is_free BOOLEAN DEFAULT TRUE,
+  is_verified BOOLEAN DEFAULT FALSE,
+  submitted_by UUID REFERENCES profiles(id),
+  created_at TIMESTAMP DEFAULT NOW()
+);
+
+-- Create favorites table
+CREATE TABLE IF NOT EXISTS favorites (
+  id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
+  user_id UUID REFERENCES profiles(id),
+  hotspot_id UUID REFERENCES hotspots(id),
+  created_at TIMESTAMP DEFAULT NOW()
+);
+
+-- Create affiliates table
+CREATE TABLE IF NOT EXISTS affiliates (
+  id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
+  name TEXT NOT NULL,
+  url TEXT NOT NULL,
+  hotspot_id UUID REFERENCES hotspots(id),
+  commission_model TEXT NOT NULL,
+  created_at TIMESTAMP DEFAULT NOW()
 );
 
 -- Create index for location-based queries

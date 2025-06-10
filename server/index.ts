@@ -1,12 +1,14 @@
 import express, { type Request, Response, NextFunction } from "express";
 import { createServer } from "http";
 import { storage } from "./storage-final";
-import { log } from "./vite";
+import { log, setupVite } from "./vite";
+import path from "path";
 
 const app = express();
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 
+// Logging middleware
 app.use((req, res, next) => {
   const start = Date.now();
   const path = req.path;
@@ -47,8 +49,19 @@ app.use((req, res, next) => {
     console.error("Failed to initialize Supabase:", error);
   }
 
-  // Serve static files
-  app.use(express.static('server/public'));
+  // Set up Vite server in development
+  const server = createServer(app);
+  await setupVite(app, server);
+
+  // Serve static files from the client directory
+  app.use(express.static(path.resolve(__dirname, '..', 'client')));
+
+  // Handle SPA routing - always serve index.html for non-API routes
+  app.get('*', (req, res) => {
+    if (!req.path.startsWith('/api')) {
+      res.sendFile(path.resolve(__dirname, '..', 'client', 'index.html'));
+    }
+  });
 
   // API routes
   app.get("/api/hotspots", async (req, res) => {
@@ -423,8 +436,6 @@ app.use((req, res, next) => {
     res.status(status).json({ message });
     throw err;
   });
-
-  const server = createServer(app);
 
   // ALWAYS serve the app on port 5000
   // this serves both the API and the client.

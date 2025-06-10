@@ -23,7 +23,7 @@ export async function setupVite(app: Express, server: Server) {
   const serverOptions = {
     middlewareMode: true,
     hmr: { server },
-    allowedHosts: true,
+    allowedHosts: ["localhost"],
   };
 
   const vite = await createViteServer({
@@ -41,26 +41,25 @@ export async function setupVite(app: Express, server: Server) {
   });
 
   app.use(vite.middlewares);
+
+  // Handle all routes for SPA
   app.use("*", async (req, res, next) => {
     const url = req.originalUrl;
 
     try {
-      const clientTemplate = path.resolve(
-        import.meta.dirname,
-        "..",
-        "client",
-        "index.html",
+      // Read index.html
+      let template = fs.readFileSync(
+        path.resolve(import.meta.dirname, "..", "client", "index.html"),
+        "utf-8"
       );
 
-      // always reload the index.html file from disk incase it changes
-      let template = await fs.promises.readFile(clientTemplate, "utf-8");
-      template = template.replace(
-        `src="/src/main.tsx"`,
-        `src="/src/main.tsx?v=${nanoid()}"`,
-      );
-      const page = await vite.transformIndexHtml(url, template);
-      res.status(200).set({ "Content-Type": "text/html" }).end(page);
+      // Apply Vite HTML transforms
+      template = await vite.transformIndexHtml(url, template);
+
+      // Send the transformed HTML back
+      res.status(200).set({ "Content-Type": "text/html" }).end(template);
     } catch (e) {
+      // Let Vite fix the stack trace
       vite.ssrFixStacktrace(e as Error);
       next(e);
     }
